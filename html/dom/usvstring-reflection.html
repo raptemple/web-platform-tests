@@ -110,6 +110,17 @@ test(() => {
   assert_equals(w.document.documentURI, 'about:blank#%EF%BF%BD');
 }, "Document URLs: unpaired surrogate codepoint should be replaced with U+FFFD")
 
+test(() => {
+  try {
+    // TODO(gyuyoung): How to open a URL which has unpaired surrogate codepoint?
+    var w = window.open("http://test.com\uDB89");
+    assert_true(false);
+  } catch (e) {
+    assert_equals(e.message,
+         "Failed to execute 'open' on 'Window': Unable to open a window with invalid URL 'http://test.com%EF%BF%BD/'.\n");
+  }
+}, "document.origin : Document origin can't be tested because unpaired surrogate codepoint generates an invalid URL exception.")
+
 promise_test(t => {
   const sendString = 'hello\uD999';
   const receiveString = 'hello\uFFFD';
